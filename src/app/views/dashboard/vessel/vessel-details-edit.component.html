@@ -1,0 +1,639 @@
+<div class="animated fadeIn">
+  <div class="view_content">
+    <div class="modal-body">
+      <form name="userForm" [formGroup]="vesselForm" novalidate (ngSubmit)="SaveVesselDetails()"
+            class="login-form" enctype="multipart/form-data">
+        <div style="color: red;" *ngIf="errors">{{errors}}</div>
+        <div class="m-portlet__body">
+          <div class="m-form__section m-form__section--first">
+            <div class="form-group m-form__group row">
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <button type="submit" mat-raised-button color="accent" class="submit-button float-right"
+                            aria-label="SAVE">
+                      SAVE
+                    </button>
+                  </div>
+                </div>
+
+              <div class="col-lg-12 spaceing custom-upload">
+                <label for="logo">
+                  Feature Image
+                </label>
+                <dropzone #dropzonePicture [message]="'Click or drag images here to upload'"
+                          (error)="onUploadError($event)" (success)="onUploadSuccess($event)"
+                          (addedFile)="onUploadadd($event)" (removedFile)="onUploadRemoved($event)">
+                </dropzone>
+              </div>
+
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <input matInput required placeholder="Title" formControlName="title" name="title"
+                         [(ngModel)]="vessel.title">
+                  <mat-error *ngIf="vesselForm.hasError('required', ['title'])">
+                    Title is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-12 form-group">
+                <div [ngxSummernote]="wysiwygConfig" height="300px" formControlName="description" [spellcheck]="true"
+                     [(ngModel)]="vessel.description"></div>
+              </div>
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <input type="number" min="0" required matInput placeholder="Incremental Bid ($)"
+                         formControlName="incremental_bid"
+                         name="incremental_bid" [(ngModel)]="vessel.incremental_bid">
+                  <mat-error *ngIf="vesselForm.hasError('required', ['incremental_bid'])">
+                    Incremental Bid is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <label>Auction Begin </label>
+                <input [owlDateTimeTrigger]="picker" [owlDateTime]="picker"
+                       formControlName="auction_begins" name="auction_begins" placeholder="Auction Begins"
+                       [(ngModel)]="vessel.auction_begins">
+                <owl-date-time #picker></owl-date-time>
+              </div>
+              <div class="col-lg-6 form-group">
+                <label>Auction Ends </label>
+                <input [owlDateTimeTrigger]="pickerTo" [owlDateTime]="pickerTo"
+                       formControlName="auction_ends" name="auction_ends" placeholder="Auction Ends"
+                       [(ngModel)]="vessel.auction_ends">
+                <owl-date-time #pickerTo></owl-date-time>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Year" formControlName="year" name="year"
+                         [(ngModel)]="vessel.year">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Make" formControlName="make" name="make"
+                         [(ngModel)]="vessel.make">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Model" formControlName="model" name="model"
+                         [(ngModel)]="vessel.model">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Location" formControlName="location" name="location"
+                         [(ngModel)]="vessel.location">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <!-- <mat-form-field>
+                    <input matInput placeholder="Co Brokerage" formControlName="co_brokerage"
+                        name="co_brokerage" [(ngModel)]="vessel.co_brokerage">
+                </mat-form-field> -->
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Preview Period" formControlName="preview_period"
+                         name="preview_period" [(ngModel)]="vessel.preview_period">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Haul Out" formControlName="haul_out" name="haul_out"
+                         [(ngModel)]="vessel.haul_out">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Sea Trial" formControlName="sea_trial" name="sea_trial"
+                         [(ngModel)]="vessel.sea_trial">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Loa" formControlName="loa" name="loa"
+                         [(ngModel)]="vessel.loa">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Beam" formControlName="beam" name="beam"
+                         [(ngModel)]="vessel.beam">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Draft" formControlName="draft" name="draft"
+                         [(ngModel)]="vessel.draft">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-12 form-group">
+                <h3>Broker Details: </h3>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Broker Name" formControlName="broker_name"
+                         name="broker_name" [(ngModel)]="vessel.broker_name">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Broker Email" formControlName="broker_email"
+                         name="broker_email" [(ngModel)]="vessel.broker_email">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Broker Cell Phone" formControlName="broker_cell"
+                         name="broker_cell" [(ngModel)]="vessel.broker_cell">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <!-- <div class="col-lg-6 form-group">
+                  <mat-form-field>
+                      <input matInput placeholder="Buyer Document Agreement"
+                          formControlName="buyer_document_agreement" name="buyer_document_agreement"
+                          [(ngModel)]="vessel.buyer_document_agreement">
+                  </mat-form-field>
+              </div> -->
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-12 form-group">
+                <h3>Auction Details:</h3>
+              </div>
+              <!--                            <div class="col-lg-12 form-group">-->
+              <!--                                <mat-form-field>-->
+              <!--                                    <textarea rows="3" matInput placeholder="Auction Address"-->
+              <!--                                        formControlName="auction_address" name="auction_address"-->
+              <!--                                        [(ngModel)]="vessel.auction_address"></textarea>-->
+              <!--                                    &lt;!&ndash;<mat-error *ngIf="vesselForm.hasError('required', ['title'])">&ndash;&gt;-->
+              <!--                                    &lt;!&ndash;Title is required&ndash;&gt;-->
+              <!--                                    &lt;!&ndash;</mat-error>&ndash;&gt;-->
+              <!--                                </mat-form-field>-->
+              <!--                            </div>-->
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Currency" formControlName="currency_id" name="currency_id"
+                              [(ngModel)]="vessel.currency_id">
+                    <mat-option *ngFor="let permission_category of vessel.currency" [value]="permission_category.id">
+                      {{permission_category.name}}
+                    </mat-option>
+                  </mat-select>
+                  <!--                              <mat-error *ngIf="vesselForm.hasError('required', ['currency_id'])">-->
+                  <!--                                Permission Category Name is required-->
+                  <!--                              </mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input required type="number" min="0" matInput placeholder="Auction Start Price ($)"
+                         formControlName="auction_start_price" name="auction_start_price"
+                         [(ngModel)]="vessel.auction_start_price">
+                  <mat-error *ngIf="vesselForm.hasError('required', ['auction_start_price'])">
+                    Auction Start Price is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!--                            <div class="col-lg-6 form-group">-->
+              <!--                                <mat-form-field>-->
+              <!--                                    <input type="number" min="0" matInput (keypress)="numberOnly($event)" placeholder="Auction Quantity" formControlName="auction_quantity"-->
+              <!--                                        name="auction_quantity" [(ngModel)]="vessel.auction_quantity">-->
+              <!--                                    &lt;!&ndash;<mat-error *ngIf="vesselForm.hasError('required', ['title'])">&ndash;&gt;-->
+              <!--                                    &lt;!&ndash;Title is required&ndash;&gt;-->
+              <!--                                    &lt;!&ndash;</mat-error>&ndash;&gt;-->
+              <!--                                </mat-form-field>-->
+              <!--                            </div>-->
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput type="number" min="0" placeholder="Auction Reserve Price ($)"
+                         formControlName="auction_reserve_price" name="auction_reserve_price"
+                         [(ngModel)]="vessel.auction_reserve_price">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input type="number" min="0" matInput placeholder="Auction Buy Now Price ($)"
+                         formControlName="auction_buy_now_price" name="auction_buy_now_price"
+                         [(ngModel)]="vessel.auction_buy_now_price">
+                  <!--<mat-error *ngIf="vesselForm.hasError('required', ['title'])">-->
+                  <!--Title is required-->
+                  <!--</mat-error>-->
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-lg-6 form-group">
+                <mat-form-field>
+                  <input matInput required type="number" min="0" placeholder="Deposit Amount ($)"
+                         formControlName="deposit_amount"
+                         name="deposit_amount" [(ngModel)]="vessel.deposit_amount">
+                  <mat-error *ngIf="vesselForm.hasError('required', ['deposit_amount'])">
+                    Deposit Amount is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 form-group allow_checkbox">
+                <mat-checkbox formControlName="is_bidders_agreement_url" name="is_bidders_agreement_url"
+                              [(ngModel)]="vessel.is_bidders_agreement_url">
+                  Bidders Agreement Url
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-6">
+                <div *ngIf="vessel.is_bidders_agreement_url">
+                  <mat-form-field>
+                    <input matInput placeholder="Biddders Agreement(Enter URL here)"
+                           formControlName="bidders_agreement_url" name="bidders_agreement_url"
+                           [(ngModel)]="vessel.bidders_agreement_url">
+                  </mat-form-field>
+                </div>
+                <div *ngIf="!vessel.is_bidders_agreement_url">
+                  <div *ngIf="vessel.bidders_agreement == null || vessel.bidders_agreement == ''">
+
+                    <input type="file" name="bidders_agreement" formControlName="bidders_agreement"
+                           (change)="detectFilesIndividual($event.target.files, 'bidders_agreement')"
+                           accept="application/pdf">
+
+                  </div>
+                  <div *ngIf="vessel.bidders_agreement != '' && vessel.bidders_agreement != null">
+                    <span><b>FILE LINK :- </b></span>
+                    <a target="_blank"
+                       href="{{FILE_URL}}{{vessel.bidders_agreement}}">{{vessel.bidders_agreement}}</a><br>
+                    <a (click)="removeFileInfividual('bidders_agreement')">Remove File</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 form-group allow_checkbox">
+                <mat-checkbox formControlName="is_opening_bid_incentive_url" name="is_opening_bid_incentive_url"
+                              [(ngModel)]="vessel.is_opening_bid_incentive_url">
+                  Opening bid incentive Url
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-6 form-group">
+                <div *ngIf="vessel.is_opening_bid_incentive_url">
+                  <mat-form-field>
+                    <input matInput placeholder="opening bid incentive(Enter URL here)"
+                           formControlName="opening_bid_incentive_url" name="opening_bid_incentive_url"
+                           [(ngModel)]="vessel.opening_bid_incentive_url">
+                  </mat-form-field>
+                </div>
+                <div *ngIf="!vessel.is_opening_bid_incentive_url">
+                  <div *ngIf="vessel.opening_bid_incentive == null || vessel.opening_bid_incentive == ''">
+                    <input type="file" name="opening_bid_incentive" formControlName="opening_bid_incentive"
+                           (change)="detectFilesIndividual($event.target.files, 'opening_bid_incentive')"
+                           accept="application/pdf">
+                  </div>
+                  <div *ngIf="vessel.opening_bid_incentive != '' && vessel.opening_bid_incentive != null">
+                    <span><b>FILE LINK :- </b></span>
+                    <a target="_blank"
+                       href="{{FILE_URL}}{{vessel.opening_bid_incentive}}">{{vessel.opening_bid_incentive}}</a><br>
+                    <a (click)="removeFileInfividual('opening_bid_incentive')">Remove File</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 form-group allow_checkbox">
+                <mat-checkbox formControlName="allow_opening_bid_incentive" name="allow_opening_bid_incentive"
+                              [(ngModel)]="vessel.allow_opening_bid_incentive">
+                  Allow Opening Bid Incentive ?
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-2 form-group allow_checkbox">
+                <mat-form-field>
+                  <input matInput placeholder="Buyers Premium(%)"
+                         formControlName="buyers_permium" name="buyers_permium"
+                         [(ngModel)]="vessel.buyers_permium">
+                </mat-form-field>
+              </div>
+              <div class="col-lg-2 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Opening Bid Rebate(%)"
+                         formControlName="opening_bid_rebate" name="opening_bid_rebate"
+                         [(ngModel)]="vessel.opening_bid_rebate">
+                </mat-form-field>
+              </div>
+              <div class="col-lg-2 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Preview Date"
+                         formControlName="preview_date" name="preview_date"
+                         [(ngModel)]="vessel.preview_date">
+                </mat-form-field>
+              </div>
+              <!--                          <div class="col-lg-6 form-group">-->
+              <!--                            <label>Preview Date  </label>-->
+              <!--                            <input [owlDateTimeTrigger]="picker3" [owlDateTime]="picker3"-->
+              <!--                                   formControlName="preview_date" name="preview_date" placeholder="Preview Date"-->
+              <!--                                   [(ngModel)]="vessel.preview_date">-->
+              <!--                            <owl-date-time #picker3></owl-date-time>-->
+              <!--                          </div>-->
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Section Title"
+                         formControlName="section_title" name="section_title"
+                         [(ngModel)]="vessel.section_title">
+                </mat-form-field>
+              </div>
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Buyer Premium Tooltip"
+                         formControlName="buyer_premium_tooltip" name="buyer_premium_tooltip"
+                         [(ngModel)]="vessel.buyer_premium_tooltip">
+                </mat-form-field>
+              </div>
+              <div class="col-lg-12 form-group">
+                <mat-form-field>
+                  <input matInput placeholder="Opening Bid Rebate Tooltip"
+                         formControlName="opening_bid_rebate_tooltip" name="opening_bid_rebate_tooltip"
+                         [(ngModel)]="vessel.opening_bid_rebate_tooltip">
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-lg-6 form-group allow_checkbox">
+                <mat-checkbox formControlName="is_bidding_work_url" name="is_bidding_work_url"
+                              [(ngModel)]="vessel.is_bidding_work_url">
+                  Bidding Work Url
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-6">
+                <div *ngIf="vessel.is_bidding_work_url">
+                  <mat-form-field>
+                    <input matInput placeholder="How Bidding Work(Enter URL here)"
+                           formControlName="how_bidding_work_url" name="how_bidding_work_url"
+                           [(ngModel)]="vessel.how_bidding_work_url">
+                  </mat-form-field>
+                </div>
+                <div *ngIf="!vessel.is_bidding_work_url">
+                  <div *ngIf="vessel.how_bidding_work == null || vessel.how_bidding_work == ''">
+
+                    <input type="file" name="how_bidding_work" formControlName="how_bidding_work"
+                           (change)="detectFilesIndividual($event.target.files, 'how_bidding_work')"
+                           accept="application/pdf">
+
+                  </div>
+                  <div *ngIf="vessel.how_bidding_work != '' && vessel.how_bidding_work != null">
+                    <span><b>FILE LINK :- </b></span>
+                    <a target="_blank"
+                       href="{{FILE_URL}}{{vessel.how_bidding_work}}">{{vessel.how_bidding_work}}</a><br>
+                    <a (click)="removeFileInfividual('how_bidding_work')">Remove File</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 form-group allow_checkbox">
+                <mat-checkbox formControlName="is_bidding_reg_url" name="is_bidding_reg_url"
+                              [(ngModel)]="vessel.is_bidding_reg_url">
+                  Bid Register Url
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-6">
+                <div *ngIf="vessel.is_bidding_reg_url">
+                  <mat-form-field>
+                    <input matInput placeholder="How To Register To Bid(Enter URL here)"
+                           formControlName="how_reg_to_bid_url" name="how_reg_to_bid_url"
+                           [(ngModel)]="vessel.how_reg_to_bid_url">
+                  </mat-form-field>
+                </div>
+                <div *ngIf="!vessel.is_bidding_reg_url">
+                  <div *ngIf="vessel.how_reg_to_bid == null || vessel.how_reg_to_bid == ''">
+
+                    <input type="file" name="how_reg_to_bid" formControlName="how_reg_to_bid"
+                           (change)="detectFilesIndividual($event.target.files, 'how_reg_to_bid')"
+                           accept="application/pdf">
+
+                  </div>
+                  <div *ngIf="vessel.how_reg_to_bid != '' && vessel.how_reg_to_bid != null">
+                    <span><b>FILE LINK :- </b></span>
+                    <a target="_blank"
+                       href="{{FILE_URL}}{{vessel.how_reg_to_bid}}">{{vessel.how_reg_to_bid}}</a><br>
+                    <a (click)="removeFileInfividual('how_reg_to_bid')">Remove File</a>
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-3 form-group">
+                <mat-checkbox formControlName="auction_feature" name="auction_feature"
+                              [(ngModel)]="vessel.auction_feature">
+                  Auction Feature
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-3 form-group">
+                <mat-checkbox formControlName="allowed_comment" name="allowed_comment"
+                              [(ngModel)]="vessel.allowed_comment">
+                  Allowed Comment
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-3 form-group">
+                <mat-checkbox formControlName="show_on_homepage" name="show_on_homepage"
+                              [(ngModel)]="vessel.show_on_homepage">
+                  Show On Homepage
+                </mat-checkbox>
+              </div>
+              <div class="col-lg-3 form-group">
+                <mat-checkbox formControlName="show_on_preview" name="show_on_preview"
+                              [(ngModel)]="vessel.show_on_preview">
+                  Show On PreviewPage
+                </mat-checkbox>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-6 form-group">
+                <mat-radio-group aria-label="Select an option" formControlName="check_vessel" name="check_vessel"
+                                 [(ngModel)]="vessel.check_vessel">
+                  <mat-radio-button value="1" [checked]="vessel.is_sold ? true : false" (click)="checkState(radio1)"
+                                    #radio1>Sold
+                  </mat-radio-button>
+                  <mat-radio-button value="2" [checked]="vessel.comingsoon ? true : false" (click)="checkState(radio2)"
+                                    #radio2>Coming Soon
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+            </div>
+            <div class="col-lg-6 form-group" *ngIf="vessel.check_vessel ==1">
+              <mat-form-field>
+                <input matInput type="number" min="0" placeholder="Sold Amount ($)" formControlName="sold_amount"
+                       name="sold_amount" [(ngModel)]="vessel.sold_amount">
+              </mat-form-field>
+            </div>
+            <div class="form-group m-form__group row">
+            <div class="col-lg-6 form-group">
+              <mat-checkbox formControlName="is_sale_pending" name="is_sale_pending"
+                            [(ngModel)]="vessel.is_sale_pending">
+                Bidding Closed | Sale Pending
+              </mat-checkbox>
+            </div>
+            <div class="col-lg-6 form-group">
+              <mat-checkbox formControlName="available_for_offer" name="available_for_offer"
+                            [(ngModel)]="vessel.available_for_offer">
+                Bidding Closed | Available For Offers
+              </mat-checkbox>
+            </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-lg-6">
+                Escrow Required Here?
+              </div>
+              <div class="col-lg-6">
+                <div *ngIf="vessel.escrow_pdf == null || vessel.escrow_pdf == ''">
+                  <input type="file" name="escrow_pdf" formControlName="escrow_pdf"
+                         (change)="detectFilesIndividual($event.target.files, 'escrow_pdf')"
+                         accept="application/pdf">
+
+                </div>
+                <div *ngIf="vessel.escrow_pdf != '' && vessel.escrow_pdf != null">
+                  <span><b>FILE LINK :- </b></span>
+                  <a target="_blank"
+                     href="{{FILE_URL}}{{vessel.escrow_pdf}}">{{vessel.escrow_pdf}}</a><br>
+                  <a (click)="removeFileInfividual('escrow_pdf')">Remove File</a>
+                </div>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-12 form-group">
+                <h3>Vessel Additional Fields:</h3>
+              </div>
+              <div class="col-lg-12 form-group">
+                <div formArrayName="vessel_additional_fields"
+                     class="col-lg-12 row form-group justify-content-between align-items-center"
+                     *ngFor="let vessel_additional_field of vesselForm.get('vessel_additional_fields')['controls']; let i = index;">
+                  <div class="col-lg-5" [formGroupName]="i">
+                    <mat-form-field class="input-style">
+                      <input type="hidden" [(ngModel)]="vessel_additional_field.field_filename"
+                             name="field_filename" formControlName="field_filename"
+                             placeholder="Additional Field Title">
+                      <input matInput required [(ngModel)]="vessel_additional_field.title"
+                             name="title" formControlName="title"
+                             placeholder="Additional Field Title">
+                      <mat-error *ngIf="vesselForm.hasError('required', ['title'])">
+                        Title is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-5" [formGroupName]="i"
+                       *ngIf="vessel_additional_field.field_filename == null || vessel_additional_field.field_filename == ''">
+                    <input type="file" [(ngModel)]="vessel_additional_field.upload_file"
+                           name="upload_file" formControlName="upload_file"
+                           (change)="detectFiles($event.target.files, i)" accept="application/pdf">
+                  </div>
+                  <div class="col-lg-5" [formGroupName]="i"
+                       *ngIf="vessel_additional_field.field_filename != '' && vessel_additional_field.field_filename != null">
+                    <span><b>FILE LINK :- </b></span>
+                    <a target="_blank"
+                       href="{{FILE_URL}}{{vessel_additional_field.field_filename}}">{{vessel_additional_field.field_filename}}</a><br>
+                    <a (click)="RemoveFile(i)">Remove File</a>
+                  </div>
+                  <div class="col-lg-2">
+                    <button class=""
+                            *ngIf="vesselForm.get('vessel_additional_fields')['controls'].length >= 1"
+                            type="button"
+                            (click)="removeAdditionalFields(i, vesselForm.get('vessel_additional_fields')['controls'][i].get('id').value)">
+                      <i
+                        class="fa fa-remove"></i></button>
+                  </div>
+                </div>
+                <div class="col-lg-12 form-group">
+                  <button type="button" (click)="addAdditionalFields()">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                  <span>Add Additional Field</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group m-form__group row">
+              <div class="col-lg-12 form-group">
+                <h3>Auction Gallery:</h3>
+              </div>
+              <div class="col-lg-12 form-group gallery_dropzone_upload">
+                <dropzone #dropzoneGallery class="gallery_dropzone"
+                          [message]="'Click or drag images here to upload'"
+                          (error)="onUploadErrorGalllery($event)" (success)="onUploadSuccessGalllery($event)"
+                          (addedFile)="onUploadaddGalllery($event)"
+                          (removedFile)="onUploadRemovedGalllery($event)">
+                </dropzone>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <button type="submit" mat-raised-button color="accent" class="submit-button"
+                      aria-label="SAVE">
+                SAVE
+              </button>
+              <button type="button" mat-raised-button color="accent" class="submit-button"
+                      aria-label="CANCEL" (click)="cancel()">
+                CANCEL
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  .view_content {
+    background-color: #fff;
+    padding: 10px;
+  }
+
+  dropzone.gallery_dropzone {
+    width: 800px !important;
+  }
+
+</style>

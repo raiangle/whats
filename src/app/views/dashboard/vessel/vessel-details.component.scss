@@ -1,0 +1,71 @@
+::ng-deep .view_content .dropzone .dz-preview .dz-error-message {
+  top: 154px;
+}
+.removeImage {
+  position: absolute;
+  font-size: 0 !important;
+  top: 0px;
+  right: 0;
+
+  &::after {
+    position: absolute;
+    content: "X";
+    left: 0px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    top: -12px;
+    height: 22px;
+    width: 22px;
+    background: #000;
+    border-radius: 100%;
+    text-align: center;
+    opacity: 0.5;
+  }
+}
+
+label.custom-file-upload {
+  display: inline-block;
+  background-color: #f26433;
+  padding: 8px 15px;
+  vertical-align: top;
+  color: #ffffff;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: auto !important;
+}
+
+img {
+  margin-bottom: 0;
+  max-width: 100%;
+}
+
+.images_wrap {
+
+  width: 80px;
+  margin: 0px 10px 20px;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &>div {
+    position: relative;
+  }
+
+  .document-image {
+    margin: 0px;
+    padding: 0px;
+  }
+}
+::ng-deep .allow_checkbox label.mat-checkbox-layout {
+  padding: 13px 0 0 0;
+}
+::ng-deep .view_content .mat-radio-label {
+    padding: 0 20px 0 0;
+}

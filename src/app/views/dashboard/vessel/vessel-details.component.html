@@ -1,0 +1,59 @@
+<div class="animated fadeIn">
+    <div class="row" style="float: right;padding-bottom:15px;margin-right: 2px;">
+        <button type="button" [appHasPermission]='"vessel.add"' mat-raised-button class="mat-add-btn-color" aria-label="ADD"
+                tooltip="ADD" routerLink="/vessel_details/add">
+            ADD
+        </button>
+    </div>
+    <div class="clearfix"></div>
+    <div>
+        <mat-form-field style="background-color: #fff;padding: 20px;">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
+        <div class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort (matSortChange)="applySort($event)">
+
+                <ng-container matColumnDef="title">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="auction_ends">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+<!--                    <mat-cell *matCellDef="let element"> {{element.auction_ends >= cur_date ? 'current' : element.auction_ends <= cur_date ? 'sold' : 'upcoming'}} </mat-cell>-->
+                    <mat-cell *matCellDef="let element"> {{getStatus(element)}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="option">
+                    <mat-header-cell *matHeaderCellDef> Option </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <!--<button type="button" [appHasPermission]='"vessel.view"' mat-raised-button mat-raised-button-->
+                                <!--class="mat-view-btn-color" aria-label="VIEW" tooltip="VIEW" routerLink="/users/view/{{element.id}}">-->
+                            <!--<i class="fa fa-eye"></i>-->
+                        <!--</button>-->
+                        <button type="button" [appHasPermission]='"vessel.edit"' mat-raised-button mat-raised-button
+                                class="mat-edit-btn-color" aria-label="EDIT" tooltip="EDIT" routerLink="/vessel_details/edit/{{element.id}}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" [appHasPermission]='"vessel.delete"' mat-raised-button mat-raised-button
+                                class="mat-delete-btn-color" aria-label="DELETE" tooltip="DELETE" (click)="openDeleteDialog(element.id)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                        <button *ngIf="element.galleryimages.length > 0" type="button" [appHasPermission]='"vessel.edit"' mat-raised-button mat-raised-button
+                                class="mat-edit-btn-color" aria-label="gallery" tooltip="Gallery" routerLink="/vessel_details/gallery/{{element.id}}">
+                            <i class="fa fa-picture-o"></i>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons
+                           (page)="applyPagination($event)">
+            </mat-paginator>
+        </div>
+    </div>
+</div>
+

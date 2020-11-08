@@ -1,0 +1,37 @@
+<div class="animated fadeIn">
+  <div class="clearfix">
+    <button class="float-right btn btn-primary mb-2" routerLink="/ads/ads-management/add" type="button">
+      Create Ad
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover w-100">
+        <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="managements?.length != 0">
+        <tr *ngFor="let company of managements">
+          <td><img src="{{company.full_management_image}}" width="100px" height="50px"></td>
+          <td [innerHTML]="company.title">{{ company.title }}</td>
+          <td>{{company.description}}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="redirectToEditManagement(company.id)">Edit</button>
+          </td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="managements?.length == 0">
+        <tr>
+          <td colspan="4" class="no-data-available">No data!</td>
+        </tr>
+        <tbody>
+      </table>
+    </div>
+  </div>
+</div>

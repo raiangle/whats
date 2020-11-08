@@ -1,0 +1,167 @@
+<div class="animated fadeIn" *ngIf="adsManagementForm">
+  <form class="card" [formGroup]="adsManagementForm" novalidate (ngSubmit)="adsManagement()" autocomplete="off">
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+          <div class="dropzone-width">
+            <label>Image</label>
+            <app-single-dropzone [placeHolderText]="'Click Or Drag Image to upload!'"
+                                 [path]="eventMgtData?.full_management_image"
+                                 [onDragText]="'Drop Image to upload!'"
+                                 [control]="adsManagementForm.get('image')">
+            </app-single-dropzone>
+          </div>
+        </div>
+
+
+        <app-form-input-text class="col-md-6" [label]="'Title'"
+                             [control]="adsManagementForm.get('title')"
+                             [validationMessage]="'Title is required'">
+        </app-form-input-text>
+        <app-form-input-textarea class="col-md-6" [label]="'Description'"
+                                 [validationMessage]="'description is required'"
+                                 [control]="adsManagementForm.get('description')">
+        </app-form-input-textarea>
+
+        <label>Resource Type</label>
+        <div class="custom-control custom-radio" *ngFor="let resource of resourceOptions; let i=index">
+          <input type="radio" class="custom-control-input"
+                 [id]="'resource_type_'+i"
+                 formControlName="resource_type"
+                 [value]="resource.value"
+                 (change)="resourceValidation(resource.value)">
+          <label [htmlFor]="'resource_type_'+i" class="custom-control-label">{{resource.name}}</label>
+        </div>
+
+        <app-form-input-select class="col-md-12" [label]="'Type'"
+                               *ngIf="adsManagementForm.get('resource_type').value===1"
+                               [control]="adsManagementForm.get('internal_id')"
+                               [validationMessage]="'type is required'"
+                               [options]="statusOptions">
+        </app-form-input-select>
+
+        <app-form-input-text class="col-md-12" [label]="'Url'"
+                             *ngIf="adsManagementForm.get('resource_type').value===2"
+                             [control]="adsManagementForm.get('url')"
+                             [validationMessage]="'Url is required'">
+        </app-form-input-text>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          Details
+        </div>
+        <form [formGroup]="adsDetailForm">
+          <div class="form-group">
+            <div>
+              <div class="row">
+                <div class="col-md-3" style="margin-top: 30px;">
+                  <div class="form-group">
+                      <label [attr.for]="'selectCategory'">Select the categories</label>
+                      <select
+                        class="custom-select"
+                        [id]="'selectCategory'"
+                        placeholder="Choose Categories"
+                        name="selectCategory"
+                        formControlName="selectCategory"
+                        required>
+                        <option value="1">HomePage</option>
+                      </select>
+                      <div *ngIf="adsDetailForm.controls['selectCategory'].errors && adsDetailForm.get('selectCategory').touched" class="error-feedback">
+                        select category is required
+                      </div>
+                    <div class="form-group"
+                         [ngClass]="{'has-error':adsDetailForm.get('dateRange').invalid && adsDetailForm.get('dateRange').touched}">
+                      <input type="text"
+                             placeholder="dd-mm-yyyy"
+                             class="form-control"
+                             bsDaterangepicker
+                             formControlName="dateRange"
+                             [id]="'dateRange'"
+                             [bsConfig]="{
+                         rangeInputFormat : 'MM/DD/YYYY',
+                         dateInputFormat: 'MM/DD/YYYY',
+                         adaptivePosition:true}">
+                      <div *ngIf="adsDetailForm.controls['dateRange'].errors && adsDetailForm.get('dateRange').touched" class="error-feedback">
+                        daterange category is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <label
+                    [ngClass]="{'has-error':adsDetailForm.get('radioType').invalid && adsDetailForm.get('radioType').touched}">
+                    Please assign one type to one or more categories</label>
+                  <div class="custom-control custom-radio"
+                       *ngFor="let radioButton of radioOptions let i=index">
+                    <input type="radio"
+                           class="custom-control-input"
+                           [id]="'radioType'+i"
+                           value="{{radioButton.value}}"
+                           (change)="setBodyValue(radioButton.value)"
+                           formControlName="radioType">
+                    <label [htmlFor]="'radioType'+i" class="custom-control-label"> {{radioButton.label}} </label>
+
+                  </div>
+                  <div *ngIf="adsDetailForm.controls['radioType'].errors && adsDetailForm.get('radioType').touched" class="error-feedback">
+                    radioType category is required
+                  </div>
+
+                  <app-form-input-number *ngIf="+adsDetailForm.get('radioType').value===1"
+                                         [control]="adsDetailForm.get('startPosition')">
+                  </app-form-input-number>
+                  <app-form-input-number *ngIf="+adsDetailForm.get('radioType').value===1"
+                                         [control]="adsDetailForm.get('repeatNumber')">
+                  </app-form-input-number>
+                </div>
+              </div>
+            </div>
+            <button fill="clear" class="btn btn-pill btn-outline-danger btn-air-danger" (click)="resetDetails()">Clear
+            </button>
+            <button fill="clear" class="btn btn-pill btn-outline-primary btn-air-primary" (click)="saveDetails()"> Save
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Type</th>
+              <th scope="col">StartEnd Date</th>
+              <th scope="col">Start Position</th>
+              <th scope="col">Repetition</th>
+              <th scope="col">Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let event of events; let i =index">
+              <td>{{event.selectCategory}}</td>
+              <td>{{event.radioType}}</td>
+              <td>{{getFormattedDate(event.dateRange)}}</td>
+              <td>{{event.startPosition}}</td>
+              <td>{{event.repeatNumber}}</td>
+              <td>
+                <button type="button" (click)="removeDetails(i,event.id)">
+                  X
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mb-2 mt-5">
+      <button class="btn btn-primary" type="submit">
+        {{id ? 'Update' : 'Create'}}
+      </button>&nbsp;
+      <button class="btn btn-danger" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

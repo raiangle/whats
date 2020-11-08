@@ -1,0 +1,28 @@
+<div class="animated fadeIn">
+  <div class="clearfix">
+    <button *ngIf="categories.length > 0" class="float-right btn btn-primary mb-2" (click)="saveCatOrder()" type="button">Save Order</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header" *ngIf="categories.length > 0">
+      <span class="ml-5">Image</span>
+      <span class="ml-5">Title</span>
+      <span class="ml-5">Description</span>
+    </div>
+    <div class="card-body" *ngIf="categories.length > 0">
+      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let movie of categories" cdkDrag>
+          <img src="{{movie.full_management_image}}" width="120px" height="50px">
+          <span class="ml-5">{{movie.title}}</span>
+          <span class="ml-5">{{movie.description}}</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body" *ngIf="categories.length == 0">
+      No Data Found For Reorder
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,221 @@
+<div class="animated fadeIn">
+  <form class="card" [formGroup]="managementForm" novalidate (ngSubmit)="addEventManagement()" autocomplete="off">
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+          <div class="dropzone-width">
+            <label>Image</label>
+            <app-single-dropzone [placeHolderText]="'Click Or Drag Image to upload!'"
+                                 [path]="eventMgtData?.full_management_image"
+                                 [onDragText]="'Drop Image to upload!'"
+                                 [control]="managementForm.get('image')">
+            </app-single-dropzone>
+          </div>
+        </div>
+
+
+        <app-form-input-text class="col-md-6" [label]="'Title'"
+                             [control]="managementForm.get('title')"
+                             [validationMessage]="'Title is required'">
+        </app-form-input-text>
+        <app-form-input-textarea class="col-md-6" [label]="'Description'"
+                                 [validationMessage]="'description is required'"
+                                 [control]="managementForm.get('description')">
+        </app-form-input-textarea>
+
+        <div class="col-md-6">
+          <label>Country</label>
+          <!-- <select class="custom-select" formControlName="country_id"
+                    [ngClass]="(loginForm.get('country_id').touched && loginForm.get('country_id').invalid)?'is-invalid':''" 
+                    (change)="onChangeCountry($event.target.value)"
+                    placeholder="Select Country">
+                        <option *ngFor="let option of countriesList" [value]="option.id">
+                          {{option.name}}
+                        </option>
+                    </select> -->
+          <ng-select [searchable]="true"
+                     [items]="countriesList"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     (change)="onChangeCountry($event)"
+                     [formControl]="managementForm.get('country_id')">
+          </ng-select>
+          <div class="invalid-feedback">Country is required</div>
+        </div>
+
+        <div class="col-md-6">
+          <label>Areas</label>
+          <ng-select [searchable]="true"
+                     [items]="areasList"
+                     [bindLabel]="'name'"
+                     [bindValue]="'id'"
+                     [formControl]="managementForm.get('area_id')">
+          </ng-select>
+          <div class="invalid-feedback">Area is required</div>
+        </div>
+
+        <div class="col-md-6">
+          <label>Category</label>
+          <ng-select [searchable]="true"
+                     [items]="systemCategories"
+                     [bindLabel]="'title'"
+                     [bindValue]="'id'"
+                     [formControl]="managementForm.get('category_id')">
+          </ng-select>
+          <div class="invalid-feedback">Category is required</div>
+        </div>
+
+        <!--        <div class="col-md-6">-->
+        <!--          <label>Organizer</label>-->
+        <!--          <ng-select [searchable]="true"-->
+        <!--                     [items]="areasList"-->
+        <!--                     [bindLabel]="'name'"-->
+        <!--                     [bindValue]="'id'"-->
+        <!--                     [formControl]="managementForm.get('organizer_id')">-->
+        <!--          </ng-select>-->
+        <!--          <div class="invalid-feedback">Organizer is required</div>-->
+        <!--        </div>-->
+
+        <app-form-input-number class="col-md-6" [label]="'contact'"
+                               [control]="managementForm.get('contact')"
+                               [validationMessage]="'contact is required'">
+        </app-form-input-number>
+
+        <app-form-input-text class="col-md-6" [label]="'Ticket Url'"
+                             [control]="managementForm.get('ticket_url')"
+                             [validationMessage]="'ticket url is required'">
+        </app-form-input-text>
+
+        <app-form-input-textarea class="col-md-12" [label]="'Address'"
+                                 [validationMessage]="'address is required'"
+                                 [control]="managementForm.get('address')">
+        </app-form-input-textarea>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label>Search Location</label>
+            <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()"
+                   placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off"
+                   #search>
+          </div>
+        </div>
+        <agm-map class="col-12"
+                 [latitude]="managementForm.get('lat').value"
+                 [longitude]="managementForm.get('long').value"
+                 [scrollwheel]="false"
+                 [zoom]="mapZoom">
+          <agm-marker [markerDraggable]="true"
+                      [latitude]="managementForm.get('lat').value"
+                      [longitude]="managementForm.get('long').value"
+                      [iconUrl]="marker"
+                      (dragEnd)="markerChanged($event)">
+          </agm-marker>
+        </agm-map>
+      </div>
+    </div>
+    <div class="mt-4 mb-5">
+      <full-calendar *ngIf="options"
+                     [editable]="true"
+                     [events]="eventsToDisplay"
+                     [header]="options.header"
+                     [customButtons]="options.customButtons"
+                     [draggable]="false"
+                     (dateClick)="insertData($event,eventAddModal)"
+                     (eventClick)="editEvents($event,eventAddModal)"
+                     [plugins]="options.plugins"></full-calendar>
+    </div>
+    <div class="card-body">
+      <div class="card-header">
+        Event Images
+      </div>
+      <app-dropzone class="col-12 mt-2" [placeHolderText]="'Click Or Drag Image to upload!'"
+                    [onDragText]="'Drop Image to upload!'"
+                    [previewImages]="prevImages"
+                    (fileHandle)="handleImage($event)"
+                    (fileRemoved)="onFileRemove($event)">
+      </app-dropzone>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">
+          {{id ? 'Update' : 'Create'}}
+        </button>&nbsp;
+        <button class="btn btn-danger" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<ng-template #eventAddModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Event Schedule: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">X</span>
+    </button>
+  </div>
+  <form [formGroup]="eventForm" (ngSubmit)="submit()">
+    <div class="modal-body">
+      <div class="row">
+<!--        <div class="col-6">-->
+<!--          <p>Repeat Event</p>-->
+<!--        </div>-->
+<!--        <div class="col-6">-->
+<!--          <button-->
+<!--            type="button"-->
+<!--            style="float:right"-->
+<!--            class="btn btn-primary"-->
+<!--            (click)="disableClick()">-->
+<!--            {{buttonDisable}}-->
+<!--          </button>-->
+<!--        </div>-->
+
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" class="form-control" formControlName="title"/>
+          </div>
+        </div>
+        <div class="col-12">
+
+          <div class="form-group">
+            <label for="date-from">From</label>
+            <input type="text"
+                   class="form-control"
+                   id="date-from"
+                   placeholder="dd-mm-yyyy"
+                   bsDatepicker
+                   (bsValueChange)="onValueChange($event,true)"
+                   [bsConfig]="{dateInputFormat: 'DD-MM-YYYY',adaptivePosition:true}"
+                   formControlName="start">
+          </div>
+          <timepicker formControlName="time">
+          </timepicker>
+
+          <div class="form-group">
+            <label for="date-to">To</label>
+            <input type="text"
+                   class="form-control"
+                   id="date-to"
+                   placeholder="dd-mm-yyyy"
+                   bsDatepicker
+                   (bsValueChange)="onValueChange($event,false)"
+                   [bsConfig]="{dateInputFormat: 'DD-MM-YYYY',adaptivePosition:true}"
+                   formControlName="end">
+          </div>
+          <timepicker formControlName="time2">
+          </timepicker>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger"
+                [disabled]="eventToEdit===null"
+                (click)="deleteEvent()">Delete
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
